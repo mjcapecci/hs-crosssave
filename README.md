@@ -59,5 +59,18 @@ Practice. Battlegrounds, Mercenaries and Duels are skipped.
   Realm Core (12.11.0) as HSTracker 3.7.0. A newer Realm could silently upgrade
   the database file to a format HSTracker can't read. If a future HSTracker
   update changes its Realm version, check before syncing.
+- The script relies on things it doesn't control, any of which can change
+  without notice:
+  - HSReplay.net's `/api/v1/games/` endpoints, which aren't a documented
+    public API. Changed field names or game type numbers are the most likely
+    break.
+  - Where and how each tracker stores its HSReplay login (`hsreplay_oauth` for
+    HDT, the `net.hearthsim.hstracker` defaults for HSTracker).
+  - HDT's XML file layout and HSTracker's database schema.
+
+  After a Hearthstone, HSReplay.net or tracker update, run `--dry-run` first.
+  Watch for a Python traceback (usually a `KeyError`), a sudden "Nothing to
+  sync" when you know there are new games, or new game modes being skipped. A
+  bad write can always be undone from `backups/`.
 - Optional flags: `--hdt-dir` (if HDT keeps its data outside `%APPDATA%`),
   `--hstracker-realm`, `--hstracker-helper`.
